@@ -1,0 +1,101 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Parameters:
+  AmazonConnectARN:
+    Type: String
+    Default: arn:aws:connect:ap-southeast-2:557196841318:instance/44e0f9aa-7f5b-4adc-8e0a-46455c38b400
+    Description: Enter the amazon connect entire arn.
+Resources:
+  getConnectFlow:
+    Type: AWS::Lambda::Function
+    DependsOn: [ "personalContactFlow" ]
+    Properties:
+      Role: !GetAtt 'lambdaDynamoLogsRole.Arn'
+      Handler: lambda_function.lambda_handler
+      Runtime: python3.6
+      Environment:
+        Variables:
+          TABLE_NAME : customerContactFlow
+      Description: ''
+      MemorySize: 128
+      Timeout: 5
+      Code:
+        ZipFile: |
+            def lambda_handler(event,context):
+              return true
+      Tags:
+        - Key: Solution
+          Value: 'Hyper-Personalisation'
+        - Key: Product
+          Value: 'AWS CX'
+        - Key: Application
+          Value: 'AWS Connect'
+
+  LambdaInvokePermissionGreeting:
+    Type: AWS::Lambda::Permission
+    DependsOn: getConnectFlow
+    Properties:
+      FunctionName: !GetAtt
+        - getConnectFlow
+        - Arn
+      Action: 'lambda:InvokeFunction'
+      Principal: connect.amazonaws.com
+      SourceAccount: !Ref 'AWS::AccountId'
+      SourceArn: !Ref AmazonConnectARN
+
+  personalContactFlow:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        -
+          AttributeName: "PhoneNumber"
+          AttributeType: "S"
+      KeySchema:
+        -
+          AttributeName: "PhoneNumber"
+          KeyType: "HASH"
+      BillingMode: "PAY_PER_REQUEST"
+      TableName: customerContactFlow
+      Tags:
+        - Key: Solution
+          Value: 'Hyper-Personalisation'
+        - Key: Product
+          Value: 'AWS CX'
+        - Key: Application
+          Value: 'AWS Connect'
+
+  lambdaDynamoLogsRole:
+    Type: "AWS::IAM::Role"
+    DependsOn: [ "personalContactFlow" ]
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: /
+      Policies:
+        - PolicyName: cloudwatchlogswrite
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Action:
+              - logs:CreateLogGroup
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+              Resource: "*"
+              Effect: Allow
+        - PolicyName: readDynamoTables
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Action:
+              - dynamodb:GetItem
+              - dynamodb:Scan
+              - dynamodb:Query
+              Resource:
+                - !GetAtt 'personalContactFlow.Arn'
+              Effect: Allow
