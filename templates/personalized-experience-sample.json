@@ -1,0 +1,263 @@
+{
+  "modules": [{
+    "id": "5a3658a3-aa27-4ed5-a8a5-a3a7efbc9c57",
+    "type": "SetLoggingBehavior",
+    "branches": [{
+      "condition": "Success",
+      "transition": "1b027277-95ff-471b-96b3-cff6ef6cdb51"
+    }],
+    "parameters": [{
+      "name": "LoggingBehavior",
+      "value": "Enable"
+    }],
+    "metadata": {
+      "position": {
+        "x": 160,
+        "y": 22
+      }
+    }
+  }, {
+    "id": "1b027277-95ff-471b-96b3-cff6ef6cdb51",
+    "type": "SetRecordingBehavior",
+    "branches": [{
+      "condition": "Success",
+      "transition": "4e65579e-d397-4a49-a46b-e7ee8c89c22a"
+    }],
+    "parameters": [{
+      "name": "RecordingBehaviorOption",
+      "value": "Disable"
+    }, {
+      "name": "RecordingParticipantOption",
+      "value": "Both"
+    }],
+    "metadata": {
+      "position": {
+        "x": 162,
+        "y": 221
+      }
+    }
+  }, {
+    "id": "4e65579e-d397-4a49-a46b-e7ee8c89c22a",
+    "type": "SetVoice",
+    "branches": [{
+      "condition": "Success",
+      "transition": "e1ef952a-5cab-42e8-a94d-2cc2aa52b362"
+    }],
+    "parameters": [{
+      "name": "GlobalVoice",
+      "value": "Nicole"
+    }],
+    "metadata": {
+      "position": {
+        "x": 162,
+        "y": 420
+      }
+    }
+  }, {
+    "id": "e1ef952a-5cab-42e8-a94d-2cc2aa52b362",
+    "type": "SetQueue",
+    "branches": [{
+      "condition": "Success",
+      "transition": "76372451-99ef-4f73-b0e5-3c5af42c2400"
+    }, {
+      "condition": "Error",
+      "transition": "76372451-99ef-4f73-b0e5-3c5af42c2400"
+    }],
+    "parameters": [{
+      "name": "Queue",
+      "value": "CHANGE_ME_QUEUE_ARN",
+      "namespace": null,
+      "resourceName": "CHANGE_ME_QUEUE_NAME"
+    }],
+    "metadata": {
+      "position": {
+        "x": 423,
+        "y": 39
+      },
+      "useDynamic": false,
+      "queue": {
+        "id": "CHANGE_ME_QUEUE_ARN",
+        "text": "CHANGE_ME_QUEUE_NAME",
+        "arn": null,
+        "metricDetail": null,
+        "resourceId": null
+      }
+    }
+  }, {
+    "id": "76372451-99ef-4f73-b0e5-3c5af42c2400",
+    "type": "PlayPrompt",
+    "branches": [{
+      "condition": "Success",
+      "transition": "bb7efde4-7e39-41f6-bde5-71b7d134a28c"
+    }],
+    "parameters": [{
+      "name": "Text",
+      "value": "Thank you form contacting Burger dot Co",
+      "namespace": null
+    }, {
+      "name": "TextToSpeechType",
+      "value": "text"
+    }],
+    "metadata": {
+      "position": {
+        "x": 426,
+        "y": 279
+      },
+      "useDynamic": false
+    }
+  }, {
+    "id": "91be0092-3cf4-4acb-b80a-ac184483a1eb",
+    "type": "Transfer",
+    "branches": [{
+      "condition": "AtCapacity",
+      "transition": "49ecea3d-6c0b-4b60-8a26-b2450e7c6da7"
+    }, {
+      "condition": "Error",
+      "transition": "49ecea3d-6c0b-4b60-8a26-b2450e7c6da7"
+    }],
+    "parameters": [],
+    "metadata": {
+      "position": {
+        "x": 1146,
+        "y": 292
+      },
+      "useDynamic": false,
+      "queue": null
+    },
+    "target": "Queue"
+  }, {
+    "id": "bb7efde4-7e39-41f6-bde5-71b7d134a28c",
+    "type": "InvokeExternalResource",
+    "branches": [{
+      "condition": "Success",
+      "transition": "ebd2fc03-efd8-4830-bca7-9784876e9fdf"
+    }, {
+      "condition": "Error",
+      "transition": "a42995e0-01ca-4bae-8b93-854a437c73b9"
+    }],
+    "parameters": [{
+      "name": "CHANGE_ME_LAMBDA_NAME",
+      "value": "CHANGE_ME_LAMBDA_ARN",
+      "namespace": null
+    }, {
+      "name": "TimeLimit",
+      "value": "8"
+    }],
+    "metadata": {
+      "position": {
+        "x": 676,
+        "y": 251
+      },
+      "dynamicMetadata": {},
+      "useDynamic": false
+    },
+    "target": "Lambda"
+  }, {
+    "id": "a42995e0-01ca-4bae-8b93-854a437c73b9",
+    "type": "Transfer",
+    "branches": [{
+      "condition": "Error",
+      "transition": "91be0092-3cf4-4acb-b80a-ac184483a1eb"
+    }],
+    "parameters": [{
+      "name": "ContactFlowId",
+      "value": "CHANGE_ME_FLOW_ARN",
+      "resourceName": "CHANGE_ME_FLOW_NAME"
+    }],
+    "metadata": {
+      "position": {
+        "x": 919,
+        "y": 281
+      },
+      "useDynamic": false,
+      "ContactFlow": {
+        "id": "CHANGE_ME_FLOW_ARN",
+        "text": "CHANGE_ME_FLOW_NAME",
+        "arn": null,
+        "metricDetail": null,
+        "resourceId": null
+      }
+    },
+    "target": "Flow"
+  }, {
+    "id": "49ecea3d-6c0b-4b60-8a26-b2450e7c6da7",
+    "type": "Disconnect",
+    "branches": [],
+    "parameters": [],
+    "metadata": {
+      "position": {
+        "x": 1370,
+        "y": 238
+      }
+    }
+  }, {
+    "id": "ebd2fc03-efd8-4830-bca7-9784876e9fdf",
+    "type": "CheckAttribute",
+    "branches": [{
+      "condition": "Evaluate",
+      "conditionType": "Contains",
+      "conditionValue": "arn:aws:connect",
+      "transition": "354796f3-bf21-4ac5-a3d8-00b1d5773da2"
+    }, {
+      "condition": "NoMatch",
+      "transition": "a42995e0-01ca-4bae-8b93-854a437c73b9"
+    }],
+    "parameters": [{
+      "name": "Attribute",
+      "value": "customerFlow"
+    }, {
+      "name": "Namespace",
+      "value": "External"
+    }],
+    "metadata": {
+      "position": {
+        "x": 915,
+        "y": 19
+      },
+      "conditionMetadata": [{
+        "id": "c559cc0d-923a-4c19-81f4-379ea532ad7f",
+        "operator": {
+          "name": "Contains",
+          "value": "Contains",
+          "shortDisplay": "contains"
+        },
+        "value": "arn:aws:connect"
+      }]
+    }
+  }, {
+    "id": "354796f3-bf21-4ac5-a3d8-00b1d5773da2",
+    "type": "Transfer",
+    "branches": [{
+      "condition": "Error",
+      "transition": "49ecea3d-6c0b-4b60-8a26-b2450e7c6da7"
+    }],
+    "parameters": [{
+      "name": "ContactFlowId",
+      "namespace": "External",
+      "value": "customerFlow"
+    }],
+    "metadata": {
+      "position": {
+        "x": 1143,
+        "y": 18
+      },
+      "useDynamic": true
+    },
+    "target": "Flow"
+  }],
+  "version": "1",
+  "type": "contactFlow",
+  "start": "5a3658a3-aa27-4ed5-a8a5-a3a7efbc9c57",
+  "metadata": {
+    "entryPointPosition": {
+      "x": 20,
+      "y": 20
+    },
+    "snapToGrid": false,
+    "name": "personalized-experience-sample",
+    "description": null,
+    "type": "contactFlow",
+    "status": "published",
+    "hash": "b0bf48847bf6fe5ddad83721c3422dfc53af32e802cde8cd4807346df7967f11"
+  }
+}
