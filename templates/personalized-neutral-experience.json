@@ -1,1 +1,283 @@
-{"modules":[{"id":"184702b4-eef6-423d-8603-7872ce17ae46","type":"Disconnect","branches":[],"parameters":[],"metadata":{"position":{"x":779,"y":342}}},{"id":"fd28e673-5bfa-4cfa-8170-22d3945052e2","type":"Transfer","branches":[{"condition":"AtCapacity","transition":"184702b4-eef6-423d-8603-7872ce17ae46"},{"condition":"Error","transition":"184702b4-eef6-423d-8603-7872ce17ae46"}],"parameters":[],"metadata":{"position":{"x":535,"y":342},"useDynamic":false,"queue":null},"target":"Queue"},{"id":"08823dd3-7a23-45ec-8d85-5110867a4521","type":"UpdateRoutingPriority","branches":[{"condition":"Success","transition":"fd28e673-5bfa-4cfa-8170-22d3945052e2"}],"parameters":[{"name":"AbsolutePosition","value":10}],"metadata":{"position":{"x":303,"y":342},"adjustUnit":null}},{"id":"ffc07664-6fc7-4c1b-b27e-27ade768832e","type":"Disconnect","branches":[],"parameters":[],"metadata":{"position":{"x":1382,"y":260}}},{"id":"b175e650-f171-448a-a6e8-271b8281dd5a","type":"SetAttributes","branches":[{"condition":"Success","transition":"997e61b4-35b5-4ff9-9632-d476684e6cb6"},{"condition":"Error","transition":"997e61b4-35b5-4ff9-9632-d476684e6cb6"}],"parameters":[{"name":"Attribute","value":"Neutral","key":"Experience","namespace":null}],"metadata":{"position":{"x":152,"y":34}}},{"id":"997e61b4-35b5-4ff9-9632-d476684e6cb6","type":"InvokeExternalResource","branches":[{"condition":"Success","transition":"f3c3aca3-d265-45e8-bdbb-64c20f6f1870"},{"condition":"Error","transition":"003f99b4-f484-4b25-a8e8-6cf4f2a2e223"}],"parameters":[{"name":"FunctionArn","value":"retrieveDetailedInformation","namespace":null},{"name":"TimeLimit","value":"8"}],"metadata":{"position":{"x":379,"y":31},"dynamicMetadata":{},"useDynamic":false},"target":"Lambda"},{"id":"f47c721b-b9ef-4050-8f45-e0c198908ff0","type":"UpdateRoutingPriority","branches":[{"condition":"Success","transition":"e2956a6a-82b0-4e4e-adc0-1e294f95cc26"}],"parameters":[{"name":"AbsolutePosition","value":1}],"metadata":{"position":{"x":1284,"y":23},"adjustUnit":null}},{"id":"e2956a6a-82b0-4e4e-adc0-1e294f95cc26","type":"Transfer","branches":[{"condition":"AtCapacity","transition":"ffc07664-6fc7-4c1b-b27e-27ade768832e"},{"condition":"Error","transition":"ffc07664-6fc7-4c1b-b27e-27ade768832e"}],"parameters":[],"metadata":{"position":{"x":1507,"y":21},"useDynamic":false,"queue":null},"target":"Queue"},{"id":"6f1947ea-0979-4069-86cb-ea19a83eca19","type":"CheckAttribute","branches":[{"condition":"Evaluate","conditionType":"Equals","conditionValue":"1","transition":"f47c721b-b9ef-4050-8f45-e0c198908ff0"},{"condition":"NoMatch","transition":"e2956a6a-82b0-4e4e-adc0-1e294f95cc26"}],"parameters":[{"name":"Attribute","value":"Stored customer input"},{"name":"Namespace","value":"System"}],"metadata":{"position":{"x":1062,"y":23},"conditionMetadata":[{"id":"ccdb8c8e-6366-4c97-84c1-6ae4da74f000","operator":{"name":"Equals","value":"Equals","shortDisplay":"="},"value":"1"}]}},{"id":"003f99b4-f484-4b25-a8e8-6cf4f2a2e223","type":"PlayPrompt","branches":[{"condition":"Success","transition":"08823dd3-7a23-45ec-8d85-5110867a4521"}],"parameters":[{"name":"Text","value":"We identify you as a valuable customer, please wait while we found the best customer service representative to help you with your queries.","namespace":null},{"name":"TextToSpeechType","value":"text"}],"metadata":{"position":{"x":79,"y":341},"useDynamic":false}},{"id":"f3c3aca3-d265-45e8-bdbb-64c20f6f1870","type":"PlayPrompt","branches":[{"condition":"Success","transition":"a518e018-3916-4241-be22-1b7593038606"}],"parameters":[{"name":"Text","value":"Thanks for reaching out  $.External.FirstName $.External.LastName, we are happy to have you as a very valuable customer.","namespace":null},{"name":"TextToSpeechType","value":"text"}],"metadata":{"position":{"x":605,"y":28},"useDynamic":false}},{"id":"a518e018-3916-4241-be22-1b7593038606","type":"StoreUserInput","branches":[{"condition":"Success","transition":"6f1947ea-0979-4069-86cb-ea19a83eca19"},{"condition":"Error","transition":"003f99b4-f484-4b25-a8e8-6cf4f2a2e223"}],"parameters":[{"name":"Text","value":"We noticed you had a $.External.ExperienceSentiment experience in the last interaction with our company, with the $.External.OrderDetail. If this is why you are calling about please press one, otherwise remain in the line.","namespace":null},{"name":"TextToSpeechType","value":"text"},{"name":"CustomerInputType","value":"Custom"},{"name":"Timeout","value":"5"},{"name":"MaxDigits","value":1},{"name":"EncryptEntry","value":false}],"metadata":{"position":{"x":843,"y":20},"useDynamic":false,"useDynamicForEncryptionKeys":true,"useDynamicForTerminatorDigits":false,"countryCodePrefix":"+1"}}],"version":"1","type":"contactFlow","start":"b175e650-f171-448a-a6e8-271b8281dd5a","metadata":{"entryPointPosition":{"x":20,"y":20},"snapToGrid":false,"name":"personalized-neutral-experience.json","description":null,"type":"contactFlow","status":"saved","hash":"5f2fdf890b7c6a885596a70f0243b20182c1822f1f36bc01091d2b227487ca91"}}
+{
+  "modules": [{
+    "id": "184702b4-eef6-423d-8603-7872ce17ae46",
+    "type": "Disconnect",
+    "branches": [],
+    "parameters": [],
+    "metadata": {
+      "position": {
+        "x": 779,
+        "y": 342
+      }
+    }
+  }, {
+    "id": "fd28e673-5bfa-4cfa-8170-22d3945052e2",
+    "type": "Transfer",
+    "branches": [{
+      "condition": "AtCapacity",
+      "transition": "184702b4-eef6-423d-8603-7872ce17ae46"
+    }, {
+      "condition": "Error",
+      "transition": "184702b4-eef6-423d-8603-7872ce17ae46"
+    }],
+    "parameters": [],
+    "metadata": {
+      "position": {
+        "x": 535,
+        "y": 342
+      },
+      "useDynamic": false,
+      "queue": null
+    },
+    "target": "Queue"
+  }, {
+    "id": "08823dd3-7a23-45ec-8d85-5110867a4521",
+    "type": "UpdateRoutingPriority",
+    "branches": [{
+      "condition": "Success",
+      "transition": "fd28e673-5bfa-4cfa-8170-22d3945052e2"
+    }],
+    "parameters": [{
+      "name": "AbsolutePosition",
+      "value": 10
+    }],
+    "metadata": {
+      "position": {
+        "x": 303,
+        "y": 342
+      },
+      "adjustUnit": null
+    }
+  }, {
+    "id": "ffc07664-6fc7-4c1b-b27e-27ade768832e",
+    "type": "Disconnect",
+    "branches": [],
+    "parameters": [],
+    "metadata": {
+      "position": {
+        "x": 1382,
+        "y": 260
+      }
+    }
+  }, {
+    "id": "b175e650-f171-448a-a6e8-271b8281dd5a",
+    "type": "SetAttributes",
+    "branches": [{
+      "condition": "Success",
+      "transition": "997e61b4-35b5-4ff9-9632-d476684e6cb6"
+    }, {
+      "condition": "Error",
+      "transition": "997e61b4-35b5-4ff9-9632-d476684e6cb6"
+    }],
+    "parameters": [{
+      "name": "Attribute",
+      "value": "Neutral",
+      "key": "Experience",
+      "namespace": null
+    }],
+    "metadata": {
+      "position": {
+        "x": 152,
+        "y": 34
+      }
+    }
+  }, {
+    "id": "997e61b4-35b5-4ff9-9632-d476684e6cb6",
+    "type": "InvokeExternalResource",
+    "branches": [{
+      "condition": "Success",
+      "transition": "f3c3aca3-d265-45e8-bdbb-64c20f6f1870"
+    }, {
+      "condition": "Error",
+      "transition": "003f99b4-f484-4b25-a8e8-6cf4f2a2e223"
+    }],
+    "parameters": [{
+      "name": "FunctionArn",
+      "value": "retrieveDetailedInformation",
+      "namespace": null
+    }, {
+      "name": "TimeLimit",
+      "value": "8"
+    }],
+    "metadata": {
+      "position": {
+        "x": 379,
+        "y": 31
+      },
+      "dynamicMetadata": {},
+      "useDynamic": false
+    },
+    "target": "Lambda"
+  }, {
+    "id": "f47c721b-b9ef-4050-8f45-e0c198908ff0",
+    "type": "UpdateRoutingPriority",
+    "branches": [{
+      "condition": "Success",
+      "transition": "e2956a6a-82b0-4e4e-adc0-1e294f95cc26"
+    }],
+    "parameters": [{
+      "name": "AbsolutePosition",
+      "value": 1
+    }],
+    "metadata": {
+      "position": {
+        "x": 1284,
+        "y": 23
+      },
+      "adjustUnit": null
+    }
+  }, {
+    "id": "e2956a6a-82b0-4e4e-adc0-1e294f95cc26",
+    "type": "Transfer",
+    "branches": [{
+      "condition": "AtCapacity",
+      "transition": "ffc07664-6fc7-4c1b-b27e-27ade768832e"
+    }, {
+      "condition": "Error",
+      "transition": "ffc07664-6fc7-4c1b-b27e-27ade768832e"
+    }],
+    "parameters": [],
+    "metadata": {
+      "position": {
+        "x": 1507,
+        "y": 21
+      },
+      "useDynamic": false,
+      "queue": null
+    },
+    "target": "Queue"
+  }, {
+    "id": "6f1947ea-0979-4069-86cb-ea19a83eca19",
+    "type": "CheckAttribute",
+    "branches": [{
+      "condition": "Evaluate",
+      "conditionType": "Equals",
+      "conditionValue": "1",
+      "transition": "f47c721b-b9ef-4050-8f45-e0c198908ff0"
+    }, {
+      "condition": "NoMatch",
+      "transition": "e2956a6a-82b0-4e4e-adc0-1e294f95cc26"
+    }],
+    "parameters": [{
+      "name": "Attribute",
+      "value": "Stored customer input"
+    }, {
+      "name": "Namespace",
+      "value": "System"
+    }],
+    "metadata": {
+      "position": {
+        "x": 1062,
+        "y": 23
+      },
+      "conditionMetadata": [{
+        "id": "ccdb8c8e-6366-4c97-84c1-6ae4da74f000",
+        "operator": {
+          "name": "Equals",
+          "value": "Equals",
+          "shortDisplay": "="
+        },
+        "value": "1"
+      }]
+    }
+  }, {
+    "id": "003f99b4-f484-4b25-a8e8-6cf4f2a2e223",
+    "type": "PlayPrompt",
+    "branches": [{
+      "condition": "Success",
+      "transition": "08823dd3-7a23-45ec-8d85-5110867a4521"
+    }],
+    "parameters": [{
+      "name": "Text",
+      "value": "We identify you as a valuable customer, please wait while we found the best customer service representative to help you with your queries.",
+      "namespace": null
+    }, {
+      "name": "TextToSpeechType",
+      "value": "text"
+    }],
+    "metadata": {
+      "position": {
+        "x": 79,
+        "y": 341
+      },
+      "useDynamic": false
+    }
+  }, {
+    "id": "f3c3aca3-d265-45e8-bdbb-64c20f6f1870",
+    "type": "PlayPrompt",
+    "branches": [{
+      "condition": "Success",
+      "transition": "a518e018-3916-4241-be22-1b7593038606"
+    }],
+    "parameters": [{
+      "name": "Text",
+      "value": "Thanks for reaching out  $.External.FirstName $.External.LastName, we are happy to have you as a very valuable customer.",
+      "namespace": null
+    }, {
+      "name": "TextToSpeechType",
+      "value": "text"
+    }],
+    "metadata": {
+      "position": {
+        "x": 605,
+        "y": 28
+      },
+      "useDynamic": false
+    }
+  }, {
+    "id": "a518e018-3916-4241-be22-1b7593038606",
+    "type": "StoreUserInput",
+    "branches": [{
+      "condition": "Success",
+      "transition": "6f1947ea-0979-4069-86cb-ea19a83eca19"
+    }, {
+      "condition": "Error",
+      "transition": "003f99b4-f484-4b25-a8e8-6cf4f2a2e223"
+    }],
+    "parameters": [{
+      "name": "Text",
+      "value": "We noticed you had a $.External.ExperienceSentiment experience in the last interaction with our company, with the $.External.OrderDetail. If this is why you are calling about please press one, otherwise remain in the line.",
+      "namespace": null
+    }, {
+      "name": "TextToSpeechType",
+      "value": "text"
+    }, {
+      "name": "CustomerInputType",
+      "value": "Custom"
+    }, {
+      "name": "Timeout",
+      "value": "5"
+    }, {
+      "name": "MaxDigits",
+      "value": 1
+    }, {
+      "name": "EncryptEntry",
+      "value": false
+    }],
+    "metadata": {
+      "position": {
+        "x": 843,
+        "y": 20
+      },
+      "useDynamic": false,
+      "useDynamicForEncryptionKeys": true,
+      "useDynamicForTerminatorDigits": false,
+      "countryCodePrefix": "+1"
+    }
+  }],
+  "version": "1",
+  "type": "contactFlow",
+  "start": "b175e650-f171-448a-a6e8-271b8281dd5a",
+  "metadata": {
+    "entryPointPosition": {
+      "x": 20,
+      "y": 20
+    },
+    "snapToGrid": false,
+    "name": "personalized-neutral-experience.json",
+    "description": null,
+    "type": "contactFlow",
+    "status": "saved",
+    "hash": "5f2fdf890b7c6a885596a70f0243b20182c1822f1f36bc01091d2b227487ca91"
+  }
+}
