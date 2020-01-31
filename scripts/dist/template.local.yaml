@@ -1,0 +1,57 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Project - Operational; SAM Stack
+
+Parameters:
+  DeploymentStrategy:
+    Type: String
+    Default: AllAtOnce
+  AmazonConnectARN:
+    Type: String
+    Default: arn:aws:connect:ap-southeast-2:557196841318:instance/44e0f9aa-7f5b-4adc-8e0a-46455c38b400
+    Description: Enter the amazon connect entire arn.
+
+Globals:
+  Function:
+    Timeout: 8
+    MemorySize: 512
+
+Resources:
+  PermissionForAddition:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref retrieveConnectInfo
+      Action: lambda:AddPermission
+      Principal: connect.amazonaws.com
+      SourceAccount: !Ref 'AWS::AccountId'
+      SourceArn: !Ref AmazonConnectARN
+  PermissionForInvoke:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref retrieveConnectInfo
+      Action: lambda:InvokeFunction
+      Principal: connect.amazonaws.com
+      SourceAccount: !Ref 'AWS::AccountId'
+      SourceArn: !Ref AmazonConnectARN
+  retrieveConnectInfo:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-retrieveConnectInfo
+      #Lambda Execution Role
+      Role:
+        Fn::ImportValue: !Sub operationalHours-iam-${DeploymentEnvironment}-OperationalHoursLaFunctionLambdaRole
+      CodeUri:
+        ../output
+      Handler: lambda_function.lambda_handler
+      Runtime: python3.6
+      AutoPublishAlias: live
+      Tracing: Active
+      DeploymentPreference:
+        Type: !Ref DeploymentStrategy
+        #CodeDeploy role for lambda deployment
+        Role: !ImportValue base-iam-stack-CodeDeployLambdaRole
+      Environment:
+        Variables:
+          TABLE_NAME: phoneKeyMap-local
+          DB_ENDPOINT: http://docker.for.mac.localhost:8000/

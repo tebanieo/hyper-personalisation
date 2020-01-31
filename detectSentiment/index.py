@@ -9,6 +9,7 @@ def lambda_handler(event,context):
 
     #Retrieve the customer phone number from the trigger Event
     callerID = event["Details"]["ContactData"]["CustomerEndpoint"]["Address"]
+    # Retrieve intent from the DynamoDB Table and sent it to comprenhend to determine result ?
 
     #Establish connection to dynamoDB and retrieve table
     dynamodb = boto3.resource('dynamodb')
