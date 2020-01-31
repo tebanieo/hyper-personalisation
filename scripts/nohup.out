@@ -1,0 +1,2 @@
+Starting the Local Lambda Service. You can now invoke your Lambda Functions defined in your template through the endpoint.
+2020-01-30 21:26:54  * Running on http://127.0.0.1:3001/ (Press CTRL+C to quit)
